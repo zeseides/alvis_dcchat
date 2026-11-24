@@ -6,6 +6,16 @@ local M = Config.Messages
 local guild = ''
 local profiles = {}
 local byDiscord = {}
+local lastSent = {}
+local cooldownMs = math.floor((tonumber(Config.Cooldown) or 0) * 1000)
+
+local function coolingDown(key)
+    if cooldownMs <= 0 then return false end
+    local now = GetGameTimer()
+    if lastSent[key] and now - lastSent[key] < cooldownMs then return true end
+    lastSent[key] = now
+    return false
+end
 
 local function identifierOf(src, kind)
     local id = GetPlayerIdentifierByType(src, kind)
@@ -134,6 +144,7 @@ AddEventHandler('playerDropped', function()
     local p = profiles[source]
     if p and byDiscord[p.id] == source then byDiscord[p.id] = nil end
     profiles[source] = nil
+    lastSent[source] = nil
 end)
 
 RegisterCommand('dcunlink', function(src, args)
@@ -214,6 +225,17 @@ exports('isMuted', function(src)
     if isMuted(src) then notifyMuted(src) return true end
     return false
 end)
+local function blocked(src)
+    src = tonumber(src)
+    if isMuted(src) then notifyMuted(src) return true end
+    if coolingDown(src) then
+        TriggerClientEvent('chat:addMessage', src, { args = { M.system, M.cooldown } })
+        return true
+    end
+    return false
+end
+
+exports('blocked', blocked)
 exports('relay', relay)
 exports('profile', function(src)
     local p = profiles[tonumber(src)]
@@ -234,6 +256,7 @@ end
 AddEventHandler('alvis_dcchat:message', function(msg)
     if type(msg) ~= 'table' or not msg.author then return end
     local id = tostring(msg.author.id)
+    if coolingDown('dc:' .. id) then return end
     local text = tostring(msg.text or ''):gsub('%^%d', ''):sub(1, Config.MaxTextLength)
     local html = {
         '<div style="padding:0.1vw;margin:0.1vw;font-weight:bold;font-size:16px;word-break:break-all;">',
@@ -260,7 +283,7 @@ if Config.ChatMode == 'builtin' then
     AddEventHandler('chatMessage', function(src, name, message)
         if message:sub(1, 1) == '/' then return end
         CancelEvent()
-        if isMuted(src) then return notifyMuted(src) end
+        if blocked(src) then return end
         local p = profiles[src]
         local shown = Config.InGameName == 'discord' and p and p.name or name
         TriggerClientEvent('chat:addMessage', -1, {
@@ -268,5 +291,14 @@ if Config.ChatMode == 'builtin' then
             args = { shown, message },
         })
         relay(src, message)
+    end)
+end
+
+if Config.Presence then
+    CreateThread(function()
+        while true do
+            TriggerEvent('alvis_dcchat:presence', Config.PresenceText:format(#GetPlayers(), GetConvarInt('sv_maxclients', 32)))
+            Wait(math.max(tonumber(Config.PresenceInterval) or 60, 20) * 1000)
+        end
     end)
 end

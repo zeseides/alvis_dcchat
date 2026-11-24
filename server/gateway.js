@@ -5,12 +5,14 @@ const FATAL = [4004, 4010, 4011, 4012, 4013, 4014];
 const STICKER_EXT = { 1: 'png', 2: 'png', 4: 'gif' };
 
 let channel = '';
+let presence = null;
 const pending = new Map();
 const DIRECT_GIF = /^https:\/\/media\d*\.(tenor|giphy)\.com\//;
 let ws, beat, seq = null, session = null, resumeUrl = null, acked = true, stopped = false;
 
 const log = (...a) => console.log('[alvis_dcchat]', ...a);
 const send = (op, d) => ws && ws.readyState === 1 && ws.send(JSON.stringify({ op, d }));
+const sendPresence = () => presence && send(3, { since: null, activities: [{ type: 4, name: 'Custom Status', state: presence }], status: 'online', afk: false });
 
 function cleanText(m) {
     let text = m.content || '';
@@ -48,6 +50,9 @@ function dispatch(t, d) {
         session = d.session_id;
         resumeUrl = d.resume_gateway_url;
         log(`connected as ${d.user.username}`);
+        sendPresence();
+    } else if (t === 'RESUMED') {
+        sendPresence();
     } else if (t === 'MESSAGE_CREATE') {
         if (d.channel_id !== channel || d.webhook_id || !d.author || d.author.bot) return;
         if (!(d.embeds || []).length && /^<?https?:\/\/\S+>?$/.test((d.content || '').trim())) {
@@ -112,6 +117,13 @@ async function start() {
     }
     connect(false);
 }
+
+on('alvis_dcchat:presence', (text) => {
+    const next = String(text).slice(0, 128);
+    if (next === presence) return;
+    presence = next;
+    sendPresence();
+});
 
 on('onResourceStop', (name) => {
     if (name !== GetCurrentResourceName()) return;

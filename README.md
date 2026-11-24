@@ -64,6 +64,8 @@ token 和 webhook 等同密碼,請不要上傳到公開的 git 或分享給別�
 | `MuteSync` | Discord 禁言同步到遊戲 |
 | `DiscordLabel` / `DiscordLabelColor` | Discord 訊息前的標籤和顏色 |
 | `MaxImages` / `MaxTextLength` | Discord 訊息在遊戲內最多顯示幾張圖、幾個字 |
+| `Cooldown` | 發言冷卻秒數,遊戲和 Discord 兩邊各自計算,`0` 關閉 |
+| `Presence` / `PresenceText` / `PresenceInterval` | 機器人狀態顯示在線人數(例如「在線 12/48」)與更新間隔秒數 |
 | `Messages` | 所有提示文字,可自行翻譯 |
 
 ## 搭配既有聊天插件(external 模式)
@@ -73,7 +75,7 @@ token 和 webhook 等同密碼,請不要上傳到公開的 git 或分享給別�
 ```lua
 local dc = exports.alvis_dcchat
 
-if dc:isMuted(source) then return end
+if dc:blocked(source) then return end
 
 local avatar = dc:avatarTag(source)
 TriggerClientEvent('chat:addMessage', -1, {
@@ -86,7 +88,8 @@ dc:relay(source, message)
 
 | Export | 說明 |
 |---|---|
-| `isMuted(source)` | 玩家是否在 Discord 被禁言,是的話會自動提示玩家並回傳 `true` |
+| `blocked(source)` | 玩家現在是否不能發言(Discord 禁言或冷卻中),是的話會自動提示玩家並回傳 `true` |
+| `isMuted(source)` | 只檢查 Discord 禁言,是的話會自動提示玩家並回傳 `true` |
 | `avatarTag(source)` | 回傳玩家頭像的 `<img>` HTML,可放進 chat template |
 | `relay(source, text)` | 把文字用玩家的名字和頭像送到 Discord 頻道 |
 | `profile(source)` | 回傳 `{ id, name, avatar }`,沒有資料時回傳 `nil` |
@@ -111,7 +114,7 @@ MIT License,可自由使用、修改、再發布,請保留作者標示。
 
 ## English
 
-Bridges in-game chat with a Discord channel. Game messages are posted through a webhook with each player's own Discord name and avatar; Discord messages show up in game with avatar, custom emoji, stickers and images. Forces Discord linking on connect, optionally locks one license to one Discord account, and syncs Discord timeouts to in-game chat. The Discord gateway runs inside FXServer (Node 22), no external bot process.
+Bridges in-game chat with a Discord channel. Game messages are posted through a webhook with each player's own Discord name and avatar; Discord messages show up in game with avatar, custom emoji, stickers and images. Forces Discord linking on connect, optionally locks one license to one Discord account, syncs Discord timeouts to in-game chat, has an optional chat cooldown and shows the online player count as the bot's status. The Discord gateway runs inside FXServer (Node 22), no external bot process.
 
 Setup: create a bot with Server Members and Message Content intents, invite it, create a webhook in the channel, then add to `server.cfg`:
 

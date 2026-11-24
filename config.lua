@@ -22,6 +22,14 @@ Config.DiscordLabelColor = '88, 101, 242'
 Config.MaxImages = 4
 Config.MaxTextLength = 500
 
+-- 發言冷卻(秒),遊戲和 Discord 兩邊各自計算,同一人在冷卻內的訊息會被擋下。0 = 關閉
+Config.Cooldown = 0.5
+
+-- 機器人狀態顯示在線人數。%d 依序為在線人數、人數上限
+Config.Presence = true
+Config.PresenceText = '在線 %d/%d'
+Config.PresenceInterval = 60
+
 Config.Messages = {
     checking = '正在確認 Discord 綁定...',
     noLicense = '無法取得你的 Rockstar 授權,請重新啟動 FiveM',
@@ -29,6 +37,7 @@ Config.Messages = {
     licenseTaken = '這個遊戲帳號已綁定其他 Discord 帳號,請用原本的 Discord 登入,或聯絡管理員解除綁定',
     discordTaken = '這個 Discord 帳號已綁定其他遊戲帳號,請聯絡管理員解除綁定',
     muted = '你在 Discord 被禁言中,暫時無法發言',
+    cooldown = '發言太快了,請稍等一下',
     system = '系統',
     reply = '回覆 %s',
 }

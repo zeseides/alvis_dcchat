@@ -4,7 +4,7 @@ lua54 'yes'
 
 name 'alvis_dcchat'
 author 'Alvis'
-version '1.2.1'
+version '1.3.0'
 description 'Discord <-> in-game chat bridge with Discord avatars and forced Discord linking'
 
 dependency 'oxmysql'
