@@ -1,0 +1,34 @@
+Config = {}
+
+-- 進服時必須有 Discord(玩家需開著 Discord 並在 FiveM 設定連結)
+Config.RequireDiscord = true
+
+-- 一個遊戲帳號(license)只能綁一個 Discord,反之亦然。解除綁定: 控制台 dcunlink <license 或 discord id>
+Config.LockAccount = true
+
+-- 'builtin'  插件自己處理一般聊天(沒有其他聊天插件的伺服器用這個)
+-- 'external' 由你的聊天插件呼叫 export(見 README),例如 rpchat
+Config.ChatMode = 'builtin'
+
+-- builtin 模式下,遊戲內聊天顯示的名字: 'game' 遊戲名稱 / 'discord' Discord 名稱
+Config.InGameName = 'game'
+
+-- 在 Discord 群組被禁言(Timeout)的玩家,遊戲內也不能發言
+Config.MuteSync = true
+
+-- 遊戲內顯示 Discord 訊息的設定
+Config.DiscordLabel = '[DC]'
+Config.DiscordLabelColor = '88, 101, 242'
+Config.MaxImages = 4
+Config.MaxTextLength = 500
+
+Config.Messages = {
+    checking = '正在確認 Discord 綁定...',
+    noLicense = '無法取得你的 Rockstar 授權,請重新啟動 FiveM',
+    noDiscord = '本伺服器必須綁定 Discord。請先開啟 Discord 桌面版,並在 FiveM 設定裡連結 Discord 帳號,然後重新啟動 FiveM 再連線',
+    licenseTaken = '這個遊戲帳號已綁定其他 Discord 帳號,請用原本的 Discord 登入,或聯絡管理員解除綁定',
+    discordTaken = '這個 Discord 帳號已綁定其他遊戲帳號,請聯絡管理員解除綁定',
+    muted = '你在 Discord 被禁言中,暫時無法發言',
+    system = '系統',
+    reply = '回覆 %s',
+}
