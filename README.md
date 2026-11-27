@@ -4,6 +4,8 @@
 
 由 Alvis 獨立製作。
 
+![運作方式](docs/flow.png)
+
 ## 功能
 
 - 遊戲 → Discord:用 Webhook 發送,每則訊息顯示玩家的 Discord 名稱與頭像
@@ -13,6 +15,18 @@
 - 在 Discord 群組被禁言(Timeout)的玩家,遊戲內也無法發言,即時同步
 - 玩家在遊戲內無法 @everyone 或 @身分組
 - 不需要另外架機器人程式,Discord 連線直接跑在 FXServer 裡
+
+### 畫面示意
+
+遊戲內:玩家訊息帶 Discord 頭像,Discord 來的訊息有 `[DC]` 標籤,回覆和圖片都會顯示
+
+![遊戲內聊天](docs/ingame.png)
+
+Discord 頻道:遊戲玩家用自己的名字和頭像發言(Discord 會在 Webhook 訊息旁標示 APP),機器人狀態顯示在線人數
+
+![Discord 頻道](docs/discord.png)
+
+> 以上為示意圖,玩家名稱與頭像為範例
 
 ## 需求
 
