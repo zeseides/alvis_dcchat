@@ -30,6 +30,10 @@ Config.Presence = true
 Config.PresenceText = '在線 %d/%d'
 Config.PresenceInterval = 60
 
+-- 啟動時與每隔幾小時檢查 GitHub 是否有新版本,有的話在伺服器控制台提醒
+Config.UpdateCheck = true
+Config.UpdateCheckHours = 6
+
 Config.Messages = {
     checking = '正在確認 Discord 綁定...',
     noLicense = '無法取得你的 Rockstar 授權,請重新啟動 FiveM',
@@ -40,4 +44,5 @@ Config.Messages = {
     cooldown = '發言太快了,請稍等一下',
     system = '系統',
     reply = '回覆 %s',
+    update = '有新版本 v%s 可以更新(目前 v%s)',
 }

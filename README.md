@@ -13,6 +13,7 @@
 - 在 Discord 群組被禁言(Timeout)的玩家,遊戲內也無法發言,即時同步
 - 玩家在遊戲內無法 @everyone 或 @身分組
 - 不需要另外架機器人程式,Discord 連線直接跑在 FXServer 裡
+- 自動檢查新版本,有更新時在伺服器控制台提醒並附上更新說明
 
 ### 畫面示意
 
@@ -78,6 +79,7 @@ token 和 webhook 等同密碼,請不要上傳到公開的 git 或分享給別�
 | `MaxImages` / `MaxTextLength` | Discord 訊息在遊戲內最多顯示幾張圖、幾個字 |
 | `Cooldown` | 發言冷卻秒數,遊戲和 Discord 兩邊各自計算,`0` 關閉 |
 | `Presence` / `PresenceText` / `PresenceInterval` | 機器人狀態顯示在線人數(例如「在線 12/48」)與更新間隔秒數 |
+| `UpdateCheck` / `UpdateCheckHours` | 啟動時和每隔幾小時檢查 GitHub 有沒有新版本,有的話在控制台提醒 |
 | `Messages` | 所有提示文字,可自行翻譯 |
 
 ## 搭配既有聊天插件(external 模式)
@@ -126,7 +128,7 @@ MIT License,可自由使用、修改、再發布,請保留作者標示。
 
 ## English
 
-Bridges in-game chat with a Discord channel. Game messages are posted through a webhook with each player's own Discord name and avatar; Discord messages show up in game with avatar, custom emoji, stickers and images. Forces Discord linking on connect, optionally locks one license to one Discord account, syncs Discord timeouts to in-game chat, has an optional chat cooldown and shows the online player count as the bot's status. The Discord gateway runs inside FXServer (Node 22), no external bot process.
+Bridges in-game chat with a Discord channel. Game messages are posted through a webhook with each player's own Discord name and avatar; Discord messages show up in game with avatar, custom emoji, stickers and images. Forces Discord linking on connect, optionally locks one license to one Discord account, syncs Discord timeouts to in-game chat, has an optional chat cooldown shows the online player count as the bot's status, and checks GitHub releases for updates (console notice, `Config.UpdateCheck`). The Discord gateway runs inside FXServer (Node 22), no external bot process.
 
 Setup: create a bot with Server Members and Message Content intents, invite it, create a webhook in the channel, then add to `server.cfg`:
 
